@@ -83,8 +83,8 @@ dependencies {
     implementation("androidx.hilt:hilt-work:1.1.0")
     kapt("androidx.hilt:hilt-compiler:1.1.0")
     
-    // SQLite Extensions for Vector Search
-    implementation("io.github.asg017:sqlite-vec:0.1.0-alpha.1")
+    // GSON for handling vector data
+    implementation("com.google.code.gson:gson:2.10.1")
     
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")

@@ -40,6 +40,6 @@ interface ScreenshotDao {
     @Query("SELECT * FROM screenshots WHERE extractedText LIKE '%' || :query || '%' ORDER BY timestamp DESC")
     fun searchScreenshotsByText(query: String): Flow<List<Screenshot>>
     
-    @RawQuery
-    fun vectorSearch(query: SupportSQLiteQuery): List<Screenshot>
+    @Query("SELECT * FROM screenshots WHERE embedding IS NOT NULL")
+    suspend fun getAllScreenshotsWithEmbeddings(): List<Screenshot>
 }

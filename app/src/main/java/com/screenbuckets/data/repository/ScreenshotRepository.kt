@@ -86,15 +86,15 @@ class ScreenshotRepository @Inject constructor(
     }
     
     suspend fun searchByVectorSimilarity(embedding: List<Float>, limit: Int = 10): List<Screenshot> {
-        val embeddingString = embedding.joinToString(",")
-        val query = """
-            SELECT s.* FROM screenshots s
-            JOIN screenshot_vectors v ON s.id = v.rowid
-            ORDER BY vec_cosine_distance(v.embedding, vec_to_array('$embeddingString'))
-            LIMIT $limit
-        """.trimIndent()
+        // Get all screenshots with embeddings
+        val allScreenshots = screenshotDao.getAllScreenshotsWithEmbeddings()
         
-        return screenshotDao.vectorSearch(SimpleSQLiteQuery(query))
+        // Use VectorUtil to find similar screenshots
+        return com.screenbuckets.utils.VectorUtil.findSimilarScreenshots(
+            queryEmbedding = embedding,
+            screenshots = allScreenshots,
+            limit = limit
+        )
     }
     
     suspend fun getScreenshotById(id: Long): Screenshot? {

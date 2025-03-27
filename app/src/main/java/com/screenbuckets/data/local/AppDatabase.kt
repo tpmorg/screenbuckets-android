@@ -42,19 +42,9 @@ abstract class AppDatabase : RoomDatabase() {
             .addCallback(object : RoomDatabase.Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
-                    // Initialize Vector Search Extension (SQLite-VSS)
+                    // Initialize basic database structure
                     Executors.newSingleThreadExecutor().execute {
-                        // Load the SQLite Vec extension
-                        db.execSQL("SELECT load_extension('libsqlitevec');")
-                        
-                        // Create virtual table for vector search
-                        db.execSQL("""
-                            CREATE VIRTUAL TABLE IF NOT EXISTS screenshot_vectors USING vec(
-                                embedding(1536) -- Dimension depends on your embedding model
-                            );
-                        """.trimIndent())
-                        
-                        // Create index for fast search
+                        // Create index for faster processing
                         db.execSQL("CREATE INDEX IF NOT EXISTS idx_screenshot_processed ON screenshots(isProcessed);")
                     }
                 }
