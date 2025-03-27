@@ -44,12 +44,12 @@ abstract class AppDatabase : RoomDatabase() {
                     super.onCreate(db)
                     // Initialize Vector Search Extension (SQLite-VSS)
                     Executors.newSingleThreadExecutor().execute {
-                        // Load the SQLite VSS extension
-                        db.execSQL("SELECT load_extension('libvss');")
+                        // Load the SQLite Vec extension
+                        db.execSQL("SELECT load_extension('libsqlitevec');")
                         
                         // Create virtual table for vector search
                         db.execSQL("""
-                            CREATE VIRTUAL TABLE IF NOT EXISTS screenshot_vectors USING vss0(
+                            CREATE VIRTUAL TABLE IF NOT EXISTS screenshot_vectors USING vec(
                                 embedding(1536) -- Dimension depends on your embedding model
                             );
                         """.trimIndent())

@@ -62,6 +62,19 @@ ScreenBuckets is an Android app that captures, organizes, and makes screenshots 
 3. Use the floating button to capture screenshots
 4. Search and organize your screenshots in the app
 
+### GitHub Authentication for Dependencies
+
+This project uses the `sqlite-vec` library from GitHub Packages. To build the project, you'll need to provide GitHub authentication:
+
+1. Create a Personal Access Token (PAT) in GitHub with `read:packages` scope
+2. Add the following to your `~/.gradle/gradle.properties` file:
+```
+gpr.user=YOUR_GITHUB_USERNAME
+gpr.key=YOUR_GITHUB_TOKEN
+```
+
+Alternatively, set the environment variables `GITHUB_USERNAME` and `GITHUB_TOKEN`.
+
 ## License
 
 MIT License

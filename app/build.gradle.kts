@@ -84,7 +84,7 @@ dependencies {
     kapt("androidx.hilt:hilt-compiler:1.1.0")
     
     // SQLite Extensions for Vector Search
-    implementation("io.github.matiasmolinas:sqlite-vss:0.1.0")
+    implementation("io.github.asg017:sqlite-vec:0.1.0-alpha.1")
     
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")

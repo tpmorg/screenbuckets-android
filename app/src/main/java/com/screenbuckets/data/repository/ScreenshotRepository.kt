@@ -90,7 +90,7 @@ class ScreenshotRepository @Inject constructor(
         val query = """
             SELECT s.* FROM screenshots s
             JOIN screenshot_vectors v ON s.id = v.rowid
-            ORDER BY vss_search(v.embedding, vss_search_params('$embeddingString'))
+            ORDER BY vec_cosine_distance(v.embedding, vec_to_array('$embeddingString'))
             LIMIT $limit
         """.trimIndent()
         
