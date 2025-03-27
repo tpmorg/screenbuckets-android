@@ -9,12 +9,10 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
+import com.screenbuckets.ScreenBucketsApp
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 // Extension function for Context to create DataStore
 val Context.settingsDataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
@@ -28,11 +26,9 @@ data class AppSettings(
     val apiKey: String = ""
 )
 
-@HiltViewModel
-class SettingsViewModel @Inject constructor(
-    @ApplicationContext private val context: Context
-) : ViewModel() {
+class SettingsViewModel : ViewModel() {
     
+    private val context = ScreenBucketsApp.instance
     private val dataStore = context.settingsDataStore
     
     // Define preference keys

@@ -1,0 +1,71 @@
+# Compiled output
+build/
+out/
+
+# Generated files
+**/generated/
+**/build/generated/
+**/res/generated/
+
+# Gradle files
+.gradle/
+**/gradle-app.setting
+**/gradlew
+**/gradlew.bat
+
+# Android Studio files
+.idea/
+*.iml
+.DS_Store
+local.properties
+**/local.properties
+
+# Navigation editor temporary files
+**/.navigation/
+
+# Build cache
+**/build-cache/
+.cxx/
+
+# Dependency directories
+**/node_modules/
+**/Podfile.lock
+
+# Logs
+*.log
+**/logs/
+
+# System files
+.DS_Store
+Thumbs.db
+*.DS_Store
+
+# Android specific
+*.apk
+*.ap_
+*.aar
+
+# Kotlin metadata
+*.kotlin_metadata
+
+# Test Coverage
+**/coverage/
+
+# Firebase Crashlytics
+fabric-crashlytics-build.properties
+
+# Other IDE
+*.iws
+
+# Jetpack compose cache
+.compose-cache/
+
+# Navigation
+.navigation/
+
+# DS Store
+**/._*
+.DS_Store
+gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
+java_pid16968.hprof

@@ -12,20 +12,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.screenbuckets.service.capture.FloatingButtonService
 import com.screenbuckets.service.capture.ScreenCaptureManager
 import com.screenbuckets.ui.screens.HomeScreen
+import com.screenbuckets.ui.screens.HomeViewModel
+import com.screenbuckets.ui.screens.ScreenshotDetailScreen
+import com.screenbuckets.ui.screens.ScreenshotDetailViewModel
 import com.screenbuckets.ui.screens.SearchScreen
+import com.screenbuckets.ui.screens.SearchViewModel
 import com.screenbuckets.ui.screens.SettingsScreen
+import com.screenbuckets.ui.screens.SettingsViewModel
 import com.screenbuckets.ui.theme.ScreenBucketsTheme
 import com.screenbuckets.utils.PermissionHelper
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     
     private val requestOverlayPermission = registerForActivityResult(
@@ -72,7 +75,7 @@ class MainActivity : ComponentActivity() {
                         composable("home") {
                             HomeScreen(
                                 navController = navController,
-                                viewModel = hiltViewModel(),
+                                viewModel = viewModel<HomeViewModel>(),
                                 onStartCapture = {
                                     // Request screen capture permission
                                     val mediaProjectionManager = getSystemService(
@@ -87,13 +90,13 @@ class MainActivity : ComponentActivity() {
                         composable("search") {
                             SearchScreen(
                                 navController = navController,
-                                viewModel = hiltViewModel()
+                                viewModel = viewModel<SearchViewModel>()
                             )
                         }
                         composable("settings") {
                             SettingsScreen(
                                 navController = navController,
-                                viewModel = hiltViewModel()
+                                viewModel = viewModel<SettingsViewModel>()
                             )
                         }
                         composable("screenshot/{screenshotId}") { backStackEntry ->
@@ -101,7 +104,7 @@ class MainActivity : ComponentActivity() {
                             ScreenshotDetailScreen(
                                 navController = navController,
                                 screenshotId = screenshotId,
-                                viewModel = hiltViewModel()
+                                viewModel = viewModel<ScreenshotDetailViewModel>()
                             )
                         }
                     }

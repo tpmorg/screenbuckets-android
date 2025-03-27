@@ -14,9 +14,7 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import com.screenbuckets.R
 import com.screenbuckets.utils.PermissionHelper
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class FloatingButtonService : Service() {
     
     private lateinit var windowManager: WindowManager

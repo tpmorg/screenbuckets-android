@@ -1,34 +1,30 @@
 package com.screenbuckets.ui.screens
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.screenbuckets.ScreenBucketsApp
 import com.screenbuckets.data.model.Screenshot
 import com.screenbuckets.data.repository.ScreenshotRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.io.File
-import javax.inject.Inject
 
-@HiltViewModel
-class ScreenshotDetailViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
-    private val screenshotRepository: ScreenshotRepository
-) : ViewModel() {
+class ScreenshotDetailViewModel : ViewModel() {
+    
+    private val context = ScreenBucketsApp.instance
+    private val repository = ScreenshotRepository.getInstance()
     
     private val _screenshot = MutableStateFlow<Screenshot?>(null)
     val screenshot: StateFlow<Screenshot?> = _screenshot.asStateFlow()
     
     fun loadScreenshot(screenshotId: Long) {
         viewModelScope.launch {
-            val result = screenshotRepository.getScreenshotById(screenshotId)
+            val result = repository.getScreenshotById(screenshotId)
             _screenshot.value = result
         }
     }
@@ -37,7 +33,7 @@ class ScreenshotDetailViewModel @Inject constructor(
         val currentScreenshot = _screenshot.value ?: return
         
         viewModelScope.launch {
-            screenshotRepository.deleteScreenshot(currentScreenshot)
+            repository.deleteScreenshot(currentScreenshot)
             _screenshot.value = null
         }
     }

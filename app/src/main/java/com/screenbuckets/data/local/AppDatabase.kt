@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.screenbuckets.ScreenBucketsApp
 import com.screenbuckets.data.model.Screenshot
 import com.screenbuckets.data.model.ScreenshotConverters
 import java.util.concurrent.Executors
@@ -26,9 +27,9 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: AppDatabase? = null
         
-        fun getInstance(context: Context): AppDatabase {
+        fun getInstance(): AppDatabase {
             return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
+                INSTANCE ?: buildDatabase(ScreenBucketsApp.instance).also { INSTANCE = it }
             }
         }
         

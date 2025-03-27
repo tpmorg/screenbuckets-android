@@ -22,28 +22,18 @@ import android.os.Looper
 import android.util.DisplayMetrics
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.work.Constraints
-import androidx.work.Data
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import com.screenbuckets.R
 import com.screenbuckets.data.repository.ScreenshotRepository
-import com.screenbuckets.service.analysis.ScreenshotAnalysisWorker
 import com.screenbuckets.utils.PermissionHelper
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import java.nio.ByteBuffer
-import javax.inject.Inject
 
-@AndroidEntryPoint
 class ScreenCaptureService : Service() {
     
-    @Inject
-    lateinit var screenshotRepository: ScreenshotRepository
+    private val repository by lazy { ScreenshotRepository.getInstance() }
     
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var mediaProjection: MediaProjection? = null
@@ -134,14 +124,11 @@ class ScreenCaptureService : Service() {
             
             // Save screenshot
             serviceScope.launch {
-                val screenshot = screenshotRepository.saveScreenshot(
+                repository.saveScreenshot(
                     croppedBitmap,
                     appName,
                     packageName
                 )
-                
-                // Schedule analysis worker
-                scheduleAnalysis(screenshot.id)
                 
                 // Stop capturing after taking a screenshot
                 stopCapture()
@@ -152,23 +139,6 @@ class ScreenCaptureService : Service() {
         } finally {
             image.close()
         }
-    }
-    
-    private fun scheduleAnalysis(screenshotId: Long) {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-        
-        val analysisData = Data.Builder()
-            .putLong(ScreenshotAnalysisWorker.KEY_SCREENSHOT_ID, screenshotId)
-            .build()
-        
-        val analysisWork = OneTimeWorkRequestBuilder<ScreenshotAnalysisWorker>()
-            .setConstraints(constraints)
-            .setInputData(analysisData)
-            .build()
-        
-        WorkManager.getInstance(this).enqueue(analysisWork)
     }
     
     private fun stopCapture() {

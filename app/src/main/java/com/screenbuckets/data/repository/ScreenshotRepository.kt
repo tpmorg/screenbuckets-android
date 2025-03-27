@@ -2,26 +2,36 @@ package com.screenbuckets.data.repository
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.net.Uri
-import androidx.sqlite.db.SimpleSQLiteQuery
-import com.screenbuckets.data.local.ScreenshotDao
+import com.screenbuckets.ScreenBucketsApp
+import com.screenbuckets.data.local.AppDatabase
 import com.screenbuckets.data.model.Screenshot
+import com.screenbuckets.utils.VectorUtil
 import kotlinx.coroutines.flow.Flow
 import java.io.File
 import java.io.FileOutputStream
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import javax.inject.Inject
 
-class ScreenshotRepository @Inject constructor(
-    private val context: Context,
-    private val screenshotDao: ScreenshotDao
-) {
+class ScreenshotRepository private constructor() {
+    
+    private val context: Context = ScreenBucketsApp.instance
+    private val screenshotDao = AppDatabase.getInstance().screenshotDao()
     
     private val screenshotsDir: File by lazy {
         File(context.filesDir, "screenshots").apply {
             if (!exists()) {
                 mkdirs()
+            }
+        }
+    }
+    
+    companion object {
+        @Volatile
+        private var instance: ScreenshotRepository? = null
+        
+        fun getInstance(): ScreenshotRepository {
+            return instance ?: synchronized(this) {
+                instance ?: ScreenshotRepository().also { instance = it }
             }
         }
     }
@@ -90,7 +100,7 @@ class ScreenshotRepository @Inject constructor(
         val allScreenshots = screenshotDao.getAllScreenshotsWithEmbeddings()
         
         // Use VectorUtil to find similar screenshots
-        return com.screenbuckets.utils.VectorUtil.findSimilarScreenshots(
+        return VectorUtil.findSimilarScreenshots(
             queryEmbedding = embedding,
             screenshots = allScreenshots,
             limit = limit
